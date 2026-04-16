@@ -5,8 +5,6 @@ Load handbook from `handbook/` for Team51 workflows and platform guides.
 Load skills from `skills/` for WordPress and Team51 agent skills.
 Reference `conventions/` for coding standards and git workflow.
 
-If `.project-context.json` exists at the repository root, read it for site-specific details (hosting platform, active plugins, theme, partner requirements).
-
 ## Key rules
 
 - Follow WordPress Coding Standards (`WordPress-Extra` PHPCS ruleset).

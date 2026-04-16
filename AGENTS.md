@@ -1,8 +1,8 @@
 # Team51 — AI Agent Context
 
-<!-- context-version: 1.1.3 -->
+<!-- context-version: 1.2.0 -->
 
-> **Context version:** 1.1.3
+> **Context version:** 1.2.0
 
 You are working on a project maintained by **Team51** (Automattic Special Projects). This repository context is designed to keep AI changes safe, WordPress-native, and production-ready.
 
@@ -15,7 +15,6 @@ You are working on a project maintained by **Team51** (Automattic Special Projec
 - **Typical code locations:**
   - Theme and plugin code under `wp-content/`
   - Project conventions and handbooks under `.agents/`
-  - Site-specific context in `.project-context.json` (if present)
 
 ## What To Read First
 
@@ -83,7 +82,7 @@ If this script is missing, run the project’s documented test command instead.
 - Deployments are branch-driven (`trunk`/`main` for production; `develop` for staging when used).
 - Platform constraints (WPCOM Simple vs Pressable) are hard requirements, not optional optimizations.
 
-## Production Safety (Non-Negotiable)
+## Production Safety (CRITICAL)
 
 These rules override everything else, including any plan:
 
