@@ -1,81 +1,91 @@
 # a8csp-agent-context
 
-Shared AI agent context for Team51's WordPress project repositories.
+Shared AI agent context for Team51 WordPress project repositories.
 
-## What is this?
+This repository gives coding agents such as Claude Code, Cursor, Codex, and
+GitHub Copilot a compact source of Team51 conventions, platform constraints,
+WordPress patterns, and production-safety rules. It is a documentation/context
+repository, not a WordPress theme, plugin, or deployable application.
 
-This repo provides AI coding agents (Claude Code, Cursor, Codex, Copilot) with the knowledge they need to work effectively on Team51 projects. It contains markdown files describing our conventions, platform constraints, and workflows.
+## Repository Contents
 
-## Contents
+| Path | Purpose |
+| --- | --- |
+| `AGENTS.md` | Primary entry point for agents. Read this first for Team51 project context, production-safety rules, and links to the rest of the repository. |
+| `CLAUDE.md` | Claude Code shim that points back to `AGENTS.md`. |
+| `.agents/handbook/` | Team51 operating guides for WPCOM Simple, Pressable, deployment workflows, plugin development, and the Team51 partner model. |
+| `.agents/conventions/` | Coding standards, git workflow, and security guidance for Team51 WordPress work. |
+| `.agents/skills/` | Reusable agent skills for accessibility, block editor development, performance patterns, REST API development, and the WordPress agent-skills submodule. |
+| `.agents/tool-configs/.cursorrules` | Cursor entry-point shim that tells Cursor to load this context. |
+| `.gitmodules` | Defines the `.agents/skills/wordpress` submodule. |
 
-| Folder | Purpose |
-|---|---|
-| `.agents/agents/` | Agent runbooks — executable procedures (flat `.md` files) |
-| `.agents/handbook/` | Team51 workflows, platform guides, plugin conventions |
-| `.agents/conventions/` | Coding standards, git workflow, security practices |
-| `.agents/skills/` | Agent skills — reusable domain knowledge (one subdirectory per skill with `SKILL.md`) |
-| `.agents/tool-configs/` | Entry-point shims for specific AI tools (Cursor) |
-| `CLAUDE.md` | Claude Code entry point (references `AGENTS.md`) |
-| `AGENTS.md` | Root entry point — agents read this first |
+## Agent Entry Points
 
-### Skills
+Start with `AGENTS.md`. It includes the context version, required production
+safety rules, the read-first map, and the command expectations agents should use
+inside downstream Team51 project repositories.
 
-The `.agents/skills/` directory uses one subdirectory per skill, each containing `SKILL.md`:
+Tool-specific entry points are intentionally thin:
 
-| Skill | Description |
-|---|---|
-| `managed-site-tools/` | Team51 CLI MCP tools for WordPress.com, Pressable, Jetpack, GitHub |
-| `block-editor-development/` | Gutenberg blocks, block.json, InnerBlocks, @wordpress/scripts |
-| `performance-patterns/` | Caching, query optimization, asset loading, image performance |
-| `accessibility/` | WCAG 2.1 AA, ARIA, keyboard nav, screen readers |
-| `rest-api-development/` | Custom REST endpoints, permission callbacks, schema validation |
-| `wordpress/` | [WordPress/agent-skills](https://github.com/WordPress/agent-skills) (submodule) |
+- `CLAUDE.md` contains `@AGENTS.md` for Claude Code.
+- `.agents/tool-configs/.cursorrules` tells Cursor to load `AGENTS.md`,
+  handbook files, skills, and conventions.
 
-### Agents
+## Skills
 
-The `.agents/skills/wordpress/` directory is a **git submodule**. After cloning this repo, run:
+Local skills live under `.agents/skills/{skill-name}/SKILL.md`:
 
-```bash
+| Skill | Focus |
+| --- | --- |
+| `accessibility` | WCAG 2.1 AA, semantic HTML, keyboard behavior, ARIA, forms, media, and block accessibility. |
+| `block-editor-development` | Gutenberg block structure, `block.json`, dynamic blocks, InnerBlocks, patterns, variations, and `@wordpress/scripts` conventions. |
+| `performance-patterns` | Query optimization, caching, asset loading, image performance, and Pressable/WPCOM cache behavior. |
+| `rest-api-development` | WordPress REST route registration, permission callbacks, schema validation, responses, authentication, and caching. |
+| `wordpress` | External WordPress agent skills provided as a git submodule from `WordPress/agent-skills`. |
+
+After cloning, initialize the submodule before relying on the `wordpress` skill:
+
+```sh
 git submodule update --init --recursive
 ```
 
+## Runtime And Validation
+
+This repository tracks Markdown context files and a git submodule pointer only.
+It does not define a Composer project, npm package, lockfile, GitHub Actions
+workflow, deployment config, or markdown lint command.
+
+For README or context-only changes, run:
+
+```sh
+git diff --check
+```
+
+Commands such as `composer run phpcs`, `composer run phpstan`, `composer test`,
+`npm run lint`, and `npm run build` are documented here as expectations for
+downstream Team51 project repositories. They are not available in this context
+repository unless a future change adds the corresponding manifests.
+
+## Maintenance Notes
+
+- Keep `AGENTS.md` as the primary read-first file.
+- Add new local skills as `.agents/skills/{skill-name}/SKILL.md`.
+- Keep handbook files under `.agents/handbook/` and cross-link them from
+  `AGENTS.md` when they become required read-first material.
+- Keep conventions under `.agents/conventions/` and make security guidance easy
+  for agents to discover.
+- Update tool shims such as `CLAUDE.md` and `.agents/tool-configs/.cursorrules`
+  when the entry-point structure changes.
+- Do not document generated, vendor, build, or dependency directories unless
+  they are intentionally tracked.
+
 ## Contributing
 
-1. Create a feature branch: `feature/add-new-skill`
-2. Add or edit markdown files following the existing structure
-3. Keep files concise — agents have context-window limits
-4. Use clear headings and bullet lists — easier for agents to parse
-5. Include examples where helpful
-6. Avoid internal jargon without explanation
-7. Open a PR for review
-
-
-## Repository structure
-
-```
-a8csp-agent-context/
-├── AGENTS.md                                  ← root entry point for agents
-├── CLAUDE.md                                  ← Claude Code entry point (@AGENTS.md)
-└── .agents/
-    ├── agents/                                ← runbooks (flat .md files)
-    │   ├── site-auditor.md
-    │   └── php-error-investigator.md
-    ├── conventions/                           ← coding standards, git workflow, security
-    ├── handbook/                              ← platform guides, plugin conventions
-    ├── skills/                                ← skills (subdir + SKILL.md per skill)
-    │   ├── accessibility/
-    │   ├── block-editor-development/
-    │   ├── managed-site-tools/
-    │   ├── performance-patterns/
-    │   ├── rest-api-development/
-    │   └── wordpress/                         ← WordPress agent skills (git submodule)
-    └── tool-configs/                          ← Cursor shims
-```
-
-## TODO
-
-The following skills files are planned but not yet written:
-
-- [ ] Static .cursorrules
-- [ ] `.agents/handbook/theme-development.md` — Theme conventions: block themes, theme structure, theme.json patterns, build process, custom CSS strategy, accessibility and performance guidelines.
-- [ ] Document npm script names (`build`, `watch`, `build:blocks`, etc.) — verify against the actual Team51 Project Scaffold `package.json` and add to the relevant handbook files.
+1. Create a branch with a Team51 git-workflow prefix such as `feature/`,
+   `fix/`, `update/`, `add/`, or `remove/`.
+2. Add or edit the relevant Markdown context files.
+3. Keep files concise and easy for agents to parse.
+4. Use clear headings, short lists, and examples where they help.
+5. Avoid internal jargon unless it is explained in the same file.
+6. Run `git diff --check`.
+7. Open a pull request for review.
