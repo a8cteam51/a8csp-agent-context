@@ -36,7 +36,7 @@ Pressable is Automattic's managed WordPress hosting platform. It is Team51's **p
 - Pressable has its own **server-side caching layer** (Varnish/nginx-based).
 - Cache can be purged via the Pressable control panel, WP-CLI, or the Team51 CLI.
 - Be mindful of caching when testing changes — purge the cache if you're not seeing updates.
-- Use cache-busting version strings on CSS and JS assets.
+- Use cache-busting version strings on CSS and JS assets — see [Asset versioning](../conventions/coding-standards.md#asset-versioning).
 
 ## Pressable control panel (MPCP)
 

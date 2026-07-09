@@ -66,7 +66,7 @@ Before deploying to production:
 - [ ] PR has been reviewed (or self-reviewed for low-risk changes)
 - [ ] No `WP_DEBUG`-level notices or errors
 - [ ] Database migrations (if any) are backwards-compatible
-- [ ] Cache-busting version strings updated on changed CSS/JS assets
+- [ ] Cache-busting version strings updated on changed CSS/JS assets — see [Asset versioning](../conventions/coding-standards.md#asset-versioning)
 - [ ] Partner has been notified if the change is visible to end users
 
 ## Rollback procedures

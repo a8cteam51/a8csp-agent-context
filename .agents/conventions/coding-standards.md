@@ -101,6 +101,54 @@ For custom Gutenberg blocks:
 - **Nesting**: avoid deep nesting (max 3 levels).
 - **Specificity**: keep selectors as low-specificity as possible; avoid `!important`.
 
+## Asset versioning
+
+**Always version enqueued scripts and styles so browser and server caches fetch the new file when it changes.** This applies to both **themes and plugins**. A stale version string is a common reason a deployed fix silently fails to reach users — Pressable's cache and the visitor's browser keep serving the old asset even though the source changed.
+
+- **Never hardcode a static version** (e.g. `'1.0'`) as the `$ver` argument of `wp_enqueue_script()` / `wp_enqueue_style()`. If the file content changes but the version string doesn't, caches never invalidate.
+- **Hand-written assets**: pass `filemtime()` of the file so the version updates automatically on every edit — no one has to remember to bump it.
+- **Built assets** (`@wordpress/scripts`): use the `version` hash from the generated `build/*.asset.php` file.
+- When editing an existing enqueue that hardcodes a version, switch it to one of the patterns below as part of the change.
+
+In a **plugin**, resolve paths with `plugin_dir_path()` / `plugins_url()`:
+
+```php
+$asset_path = plugin_dir_path( __FILE__ ) . 'assets/js/comment-voting.js';
+
+wp_enqueue_script(
+	'a8csp-custom-events-voting',
+	plugins_url( 'assets/js/comment-voting.js', __FILE__ ),
+	array(),
+	filemtime( $asset_path ),
+	true
+);
+```
+
+In a **theme**, resolve paths with `get_theme_file_uri()` / `get_theme_file_path()`:
+
+```php
+wp_enqueue_style(
+	'theme-slug-main',
+	get_theme_file_uri( 'assets/css/main.css' ),
+	array(),
+	filemtime( get_theme_file_path( 'assets/css/main.css' ) )
+);
+```
+
+For a `@wordpress/scripts` build, read the generated asset file for both dependencies and version:
+
+```php
+$asset = require plugin_dir_path( __FILE__ ) . 'build/voting.asset.php';
+
+wp_enqueue_script(
+	'a8csp-custom-events-voting',
+	plugins_url( 'build/voting.js', __FILE__ ),
+	$asset['dependencies'],
+	$asset['version'],
+	true
+);
+```
+
 ## Editor configuration
 
 All projects should include an `.editorconfig` file (provided by the project scaffold):
