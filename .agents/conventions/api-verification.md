@@ -119,6 +119,31 @@ If none of the above confirms the API exists:
   real API families, but every individual name and signature still needs
   verification — a convincing-looking sibling function may not exist.
 
+## Existence is not behavior
+
+An API can exist, be documented, and be valid PHP — and still be
+silently ignored in the context the change targets. Verify that the
+mechanism actually takes effect where you are using it, not just that
+the name resolves.
+
+Known trap (real incident): a taxonomy registered with a custom
+`meta_box_cb` to render radio buttons instead of checkboxes. The
+argument exists and the callback ran through every linter — but the
+block editor never renders taxonomy meta boxes (core registers them
+all with `__back_compat_meta_box => true`, which the block editor
+skips), so editors saw the default checkbox panel and the radio UI was
+unreachable. Custom taxonomy UI **is** achievable — via the
+`editor.PostTaxonomyType` JavaScript filter, not PHP alone; see the
+`block-editor-development` skill.
+
+The general rule: classic-editor-era mechanisms (taxonomy/meta-box
+callbacks, edit-screen hooks, admin notices on the editor screen) must
+be confirmed to apply in the block editor before relying on them. And
+never assert in a code comment, docblock, or PR description that a UI
+behaves a certain way unless that behavior was observed in the target
+context or confirmed in the platform source — a wrong behavior claim
+misleads every human and AI reviewer downstream.
+
 ## Static analysis is only a backstop
 
 PHPStan flags undefined functions, classes, and methods when the project
@@ -137,4 +162,7 @@ Before shipping code that references an API this change did not define:
 - [ ] Cross-plugin calls guarded with `function_exists()` /
       `class_exists()`.
 - [ ] The version on the target site supports the API.
+- [ ] The API takes effect in the target context (block editor vs
+      classic editor, admin vs front end, REST vs web) — not just
+      exists.
 - [ ] Anything unverifiable is flagged in the PR description.
