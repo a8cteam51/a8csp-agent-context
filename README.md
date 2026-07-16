@@ -14,7 +14,7 @@ repository, not a WordPress theme, plugin, or deployable application.
 | `AGENTS.md` | Primary entry point for agents. Read this first for Team51 project context, production-safety rules, and links to the rest of the repository. |
 | `CLAUDE.md` | Claude Code shim that points back to `AGENTS.md`. |
 | `.agents/handbook/` | Team51 operating guides for WPCOM Simple, Pressable, deployment workflows, plugin development, and the Team51 partner model. |
-| `.agents/conventions/` | Coding standards, git workflow, and security guidance for Team51 WordPress work. |
+| `.agents/conventions/` | Coding standards, git workflow, security, and API-verification guidance for Team51 WordPress work. |
 | `.agents/skills/` | Reusable agent skills for accessibility, block editor development, performance patterns, REST API development, and the WordPress agent-skills submodule. |
 | `.agents/tool-configs/.cursorrules` | Cursor entry-point shim that tells Cursor to load this context. |
 | `.gitmodules` | Defines the `.agents/skills/wordpress` submodule. |
