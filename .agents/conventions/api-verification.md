@@ -62,7 +62,7 @@ When you have WP-CLI access to a staging clone (never production):
 wp plugin list --status=active
 
 # Locate the installed plugin source, then grep it:
-wp plugin path <slug>
+wp plugin path <slug> --dir
 
 # Direct existence check on the running site:
 wp eval 'var_dump( function_exists( "wc_get_orders" ) );'
