@@ -1,8 +1,8 @@
 # Team51 — AI Agent Context
 
-<!-- context-version: 1.2.0 -->
+<!-- context-version: 1.3.0 -->
 
-> **Context version:** 1.2.0
+> **Context version:** 1.3.0
 
 You are working on a project maintained by **Team51** (Automattic Special Projects). This repository context is designed to keep AI changes safe, WordPress-native, and production-ready.
 
@@ -30,6 +30,7 @@ You are working on a project maintained by **Team51** (Automattic Special Projec
 | Follow coding standards | `.agents/conventions/coding-standards.md` |
 | Follow git workflow | `.agents/conventions/git-workflow.md` |
 | Follow security practices | `.agents/conventions/security.md` |
+| Use hooks or call core/plugin APIs | `.agents/conventions/api-verification.md` |
 
 ## Commands
 
@@ -108,6 +109,7 @@ If none of these signals are present or they conflict, treat the target as produ
 ## Common Pitfalls (CRITICAL)
 
 - **Never edit WordPress core files.** Put customizations in themes, plugins, or MU plugins.
+- **Never reference a hook, function, or class you have not verified exists.** Hook names are plain strings — an invented hook fails silently, and an invented plugin function fatals in production. Verify against the source before use: `.agents/conventions/api-verification.md`.
 - **Never force-push** to protected branches (`trunk`, `main`, `develop`).
 - Do not assume SSH, WP-CLI, or filesystem writes are available on WPCOM Simple.
 - Do not ship unescaped output or unsanitized input.

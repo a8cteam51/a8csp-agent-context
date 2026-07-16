@@ -64,6 +64,7 @@ plugin-name/
 - **Namespace all custom hooks** using the plugin slug: `apply_filters( 'a8csp_custom_events/event_title', $title )`
 - **Document hooks** with PHPDoc comments so other developers (and AI agents) can discover them.
 - **Use WordPress core hooks** before creating custom ones — check if a core hook already exists for your use case.
+- **Verify before consuming** — when hooking into core or another plugin, copy the hook name verbatim from its `do_action()`/`apply_filters()` call site and confirm functions exist on the target site. See `.agents/conventions/api-verification.md`.
 
 Example:
 
