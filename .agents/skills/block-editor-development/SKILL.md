@@ -205,6 +205,13 @@ registerBlockVariation( 'core/group', {
 - **Provide meaningful previews** in the editor. Avoid blocks that show only a placeholder or icon in the editor and render fully only on the frontend.
 - **Respect `theme.json`** — use block supports for colors, spacing, and typography instead of custom controls that duplicate what the theme already provides.
 
+## Customizing Taxonomy UI in the Editor
+
+- **`meta_box_cb` does not work in the block editor.** Core registers every taxonomy meta box with `__back_compat_meta_box => true`, and the block editor skips those entirely. Any taxonomy with `show_in_rest => true` gets the native sidebar panel instead — checkboxes for hierarchical taxonomies, a token field for flat ones. A PHP-only radio/select `meta_box_cb` silently renders as checkboxes; do not propose it, and flag it in review if you see it.
+- **Custom taxonomy UI (radio buttons, a select, anything else) IS possible** — never tell a partner it isn't. Use the `editor.PostTaxonomyType` JS filter to swap the panel component for that taxonomy slug (e.g. a `RadioControl` or `SelectControl` writing term IDs via `editPost`), enqueued with `enqueue_block_editor_assets` scoped to the relevant post type. This is the officially documented mechanism (the filter wraps `HierarchicalTermSelector` / `FlatTermSelector` via `withFilters`).
+- **Keep `show_in_rest => true`.** It is required for the taxonomy to appear in the Query Loop block's Filters panel (which keys off `publicly_queryable` in REST visibility) and does not conflict with a custom panel.
+- **Enforce single-term invariants server-side.** Quick Edit and Bulk Edit keep core's checkbox checklist no matter what the editor panel shows, so an "exactly one term" rule needs a `save_post` / `set_object_terms` guard, not just UI.
+
 ## WPCOM Compatibility
 
 - Block themes work well on both Pressable and WPCOM Simple.
